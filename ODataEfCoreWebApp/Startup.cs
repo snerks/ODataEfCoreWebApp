@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ODataEfCoreWebApp.Models;
+
+using Microsoft.OData.Edm;
+using Newtonsoft.Json;
 
 namespace ODataEfCoreWebApp
 {
@@ -25,7 +32,26 @@ namespace ODataEfCoreWebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //Adding In Memory Database.
+            services.AddDbContext<SampleODataDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("InMemoryDb");
+            });
+
+            ////Adding OData middleware.
+            //services.AddOData();
+
+            //services
+            //    .AddMvc()
+            //    //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddOData();
+            services.AddODataQueryFilter();
+
+            services
+                .AddMvc(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +68,19 @@ namespace ODataEfCoreWebApp
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            //app.UseMvc();
+
+            //Adding Model class to OData
+            var odataConventionModelBuilder = new ODataConventionModelBuilder();
+            odataConventionModelBuilder.EntitySet<Person>(nameof(Person));
+
+            //Enabling OData routing.
+            app.UseMvc(
+                routebuilder => 
+                routebuilder.MapODataServiceRoute(
+                    "odata", 
+                    "odata", 
+                    odataConventionModelBuilder.GetEdmModel()));
         }
     }
 }
