@@ -70,17 +70,29 @@ namespace ODataEfCoreWebApp
             app.UseHttpsRedirection();
             //app.UseMvc();
 
-            //Adding Model class to OData
+            // Adding Model class to OData
             var odataConventionModelBuilder = new ODataConventionModelBuilder();
-            odataConventionModelBuilder.EntitySet<Person>(nameof(Person));
+            
+            //odataConventionModelBuilder.EntitySet<Person>(nameof(Person));
+            odataConventionModelBuilder
+                .EntitySet<Person>(nameof(Person))
+                .EntityType
+                .Filter()
+                .Count()
+                .Expand()
+                .OrderBy()
+                .Page()
+                .Select();
 
-            //Enabling OData routing.
+            var edmModel = odataConventionModelBuilder.GetEdmModel();
+
+            // Enabling OData routing
             app.UseMvc(
                 routebuilder => 
                 routebuilder.MapODataServiceRoute(
                     "odata", 
-                    "odata", 
-                    odataConventionModelBuilder.GetEdmModel()));
+                    "odata",
+                    edmModel));
         }
     }
 }
