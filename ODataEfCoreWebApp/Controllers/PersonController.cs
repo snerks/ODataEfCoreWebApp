@@ -10,39 +10,6 @@ using ODataEfCoreWebApp.Models;
 
 namespace ODataEfCoreWebApp.Controllers
 {
-    //public class PersonController : Controller
-    //{
-    //    public PersonController(SampleODataDbContext sampleODataDbContext)
-    //    {
-    //        SampleODataDbContext = sampleODataDbContext ?? throw new ArgumentNullException(nameof(sampleODataDbContext));
-    //    }
-
-    //    public SampleODataDbContext SampleODataDbContext { get; }
-
-    //    [EnableQuery]
-    //    public IActionResult Get()
-    //    {
-    //        SampleODataDbContext.Database.EnsureCreated();
-
-    //        var results = SampleODataDbContext.Persons.ToList();
-
-    //        return Ok(SampleODataDbContext.Persons.AsQueryable());
-    //    }
-
-    //    [EnableQuery]
-    //    public IActionResult Get(int id)
-    //    {
-    //        SampleODataDbContext.Database.EnsureCreated();
-
-    //        var result =
-    //            SampleODataDbContext
-    //                .Persons
-    //                .SingleOrDefault(p => p.Id == id);
-
-    //        return Ok(result);
-    //    }
-    //}
-
     [ODataRoutePrefix("Person")]
     public class PersonController : ODataController
     {
@@ -58,7 +25,7 @@ namespace ODataEfCoreWebApp.Controllers
         public SampleODataDbContext SampleODataDbContext { get; }
 
         [ODataRoute]
-        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        [EnableQuery(MaxTop=100, PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
         public IActionResult Get()
         {
             var queryable = SampleODataDbContext.Persons.AsQueryable();

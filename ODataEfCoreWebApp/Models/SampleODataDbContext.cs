@@ -35,6 +35,18 @@ namespace ODataEfCoreWebApp.Models
                         Name = "Max Webster",
                         Age = 23
                     },
+                    new Person()
+                    {
+                        Id = 3,
+                        Name = "Kim Mitchell",
+                        Age = 26
+                    },
+                    new Person()
+                    {
+                        Id = 4,
+                        Name = "Terry Watkinson",
+                        Age = 26
+                    },
                 }
             );
         }
