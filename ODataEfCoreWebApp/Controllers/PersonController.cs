@@ -46,13 +46,6 @@ namespace ODataEfCoreWebApp.Controllers
     [ODataRoutePrefix("Person")]
     public class PersonController : ODataController
     {
-        //private AdventureWorks2016Context _db;
-
-        //public PersonController(AdventureWorks2016Context AdventureWorks2016Context)
-        //{
-        //    _db = AdventureWorks2016Context;
-        //}
-
         public PersonController(SampleODataDbContext sampleODataDbContext)
         {
             SampleODataDbContext = 
