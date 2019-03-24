@@ -48,6 +48,10 @@ namespace ODataEfCoreWebApp
 
 
             // https://www.youtube.com/watch?v=ZCDWUBOJ5FU
+            // 0: csproj file
+            // 1: Startup.cs : ConfigureServices
+            // 2/3: Startup.cs : Configure
+            // 4: PersonController.cs : [EnableQuery]
             // 4 Lines : 1
             services.AddOData();
 
