@@ -24,8 +24,12 @@ namespace ODataEfCoreWebApp.Controllers
 
         public SampleODataDbContext SampleODataDbContext { get; }
 
-        [ODataRoute]
-        [EnableQuery(MaxTop=100, PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        //[ODataRoute]
+        //[EnableQuery(MaxTop=100, PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+
+        // 4 Lines: 4
+        [EnableQuery]
+        [HttpGet]
         public IActionResult Get()
         {
             var queryable = SampleODataDbContext.Persons.AsQueryable();
@@ -34,8 +38,8 @@ namespace ODataEfCoreWebApp.Controllers
             return Ok(queryable);
         }
 
-        [ODataRoute("({key})")]
-        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
+        //[ODataRoute("({key})")]
+        //[EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All)]
         public IActionResult Get([FromODataUri] int key)
         {
             var result = SampleODataDbContext.Persons.Find(key);

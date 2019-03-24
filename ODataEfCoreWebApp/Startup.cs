@@ -46,7 +46,13 @@ namespace ODataEfCoreWebApp
             //    //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+
+            // https://www.youtube.com/watch?v=ZCDWUBOJ5FU
+            // 4 Lines : 1
             services.AddOData();
+
+
+
             services.AddODataQueryFilter();
 
             services
@@ -87,12 +93,21 @@ namespace ODataEfCoreWebApp
             var edmModel = odataConventionModelBuilder.GetEdmModel();
 
             // Enabling OData routing
+            //app.UseMvc(
+            //    routebuilder => 
+            //    routebuilder.MapODataServiceRoute(
+            //        "odata", 
+            //        "odata",
+            //        edmModel));
+
+            // 4 Lines: 2/3
             app.UseMvc(
-                routebuilder => 
-                routebuilder.MapODataServiceRoute(
-                    "odata", 
-                    "odata",
-                    edmModel));
+                routebuilder =>
+                {
+                    routebuilder.EnableDependencyInjection();
+                    routebuilder.Expand().Select().Count().OrderBy().Filter();
+                    routebuilder.MaxTop(100);
+                });
         }
     }
 }
